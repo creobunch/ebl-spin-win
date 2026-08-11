@@ -112,10 +112,13 @@ html,body{margin:0}
 .ebl-admin .err{color:#e08; font-size:12.5px; text-align:center; min-height:16px; margin-top:6px}
 .ebl-raffle h1{
   font-family:"Space Grotesk",sans-serif; font-weight:700;
-  font-size:clamp(26px,4.4vw,40px); line-height:1.08; margin:0 0 28px;
+  font-size:clamp(26px,4.4vw,40px); line-height:1.08; margin:0 0 18px;
   color:#fff; letter-spacing:-.5px;
 }
 .ebl-raffle h1 .accent{color:var(--gold-2)}
+.ebl-raffle .rules{list-style:none; margin:0 0 30px; padding:0; color:#c8c1b4; font-size:15px; line-height:1.9}
+.ebl-raffle .rules li{position:relative; padding-left:18px}
+.ebl-raffle .rules li::before{content:"–"; position:absolute; left:0; color:var(--gold-2)}
 .ebl-raffle .spin-btn{
   appearance:none; border:0; cursor:pointer; width:100%;
   background:linear-gradient(180deg,#fff,#f2ead9);
@@ -148,6 +151,7 @@ html,body{margin:0}
   .ebl-raffle .wrap{grid-template-columns:1fr; gap:34px; max-width:520px}
   .ebl-raffle .panel{max-width:none; text-align:center}
   .ebl-raffle .brand{margin-inline:auto}
+  .ebl-raffle .rules{display:inline-block; text-align:left}
   .ebl-raffle .stage{max-width:420px}
 }
 @media (prefers-reduced-motion:reduce){
@@ -174,6 +178,10 @@ html,body{margin:0}
     <div class="panel">
       <img class="brand" id="brandLogo" alt="EBL — Emirates Bespoke Leather">
       <h1>Win Exclusive <span class="accent">EBL</span> Gifts!</h1>
+      <ul class="rules">
+        <li>You can only spin the wheel once.</li>
+        <li>Good luck!</li>
+      </ul>
       <button class="spin-btn" id="spinBtn" type="button">🎁&nbsp; Spin &amp; Win!</button>
       <div class="result" id="result" aria-live="polite">
         <p class="tag" id="resTag">Result</p>
