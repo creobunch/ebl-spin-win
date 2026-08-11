@@ -8,14 +8,14 @@ Works as a WordPress/Elementor HTML widget or as a standalone page (e.g. GitHub 
 
 Just open `index.html` in a browser, or drop the whole file into an Elementor
 **HTML widget**. Spin by tapping the button, or tapping / dragging the wheel itself.
+Spinning is unlimited — every spin is a fresh, independent random draw, with no
+per-device or per-session restriction.
 
 ## Configure (top of the `<script>` in `index.html`)
 
 | Setting | What it does |
 |---|---|
 | `SEGMENTS` | The 6 prizes, each with a `weight` (odds) and `prize: true/false`. |
-| `MODE` | `"kiosk"` = shared showroom tablet, auto-resets for the next guest. `"once"` = one spin per device. `"staff"` = shows a "next guest" reset button. |
-| `RESET_AFTER_MS` | Kiosk auto-reset delay (ms). |
 | `FORCE_INDEX` | Default forced result (`null` = use odds). |
 | `STAFF_PIN` | 4-digit PIN for the staff panel (`""` disables it). |
 | `ADMIN_HOLD_MS` | Hold time on the logo to open the staff panel. |
@@ -27,8 +27,8 @@ Hold the **EBL logo** for ~1 second → enter the **PIN** → the control panel 
 - **Next guest wins** — pick the exact prize the next spin lands on (or Random).
 - **Gifts available** — toggle any prize off when it's out of stock.
 
-After the guest spins, the wheel auto-resets and the forced result clears.
-Press **`R`** any time for an instant staff reset.
+The forced result clears itself after each spin. Press **`R`** any time to
+clear the result panel manually.
 
 > Note: the PIN is client-side (fine for a showroom kiosk, but visible in page
 > source). For per-customer logging, a winner list, or true access control, a
