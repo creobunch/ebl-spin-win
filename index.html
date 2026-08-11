@@ -268,11 +268,10 @@ html,body{margin:0}
     rotor.appendChild(g); // attach before measuring so getComputedTextLength() is accurate
 
     if (s.icon) {
-      // smaller font so "icon + label" fits on a single line within the wedge
-      t.style.fontSize = "14px";
+      // same font-size as every other wedge label — just measure it to place the icon
       t.setAttribute("text-anchor", "start");
       var textW = t.getComputedTextLength();
-      var iconSize = 14, gap = 5;
+      var iconSize = 20, gap = 6;
       var total = iconSize + gap + textW;
       var startX = -total / 2;
       t.setAttribute("x", startX + iconSize + gap);
