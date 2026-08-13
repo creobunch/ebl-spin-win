@@ -7,9 +7,9 @@ Works as a WordPress/Elementor HTML widget or as a standalone page (e.g. GitHub 
 ## Use it
 
 Just open `index.html` in a browser, or drop the whole file into an Elementor
-**HTML widget**. Spin by tapping the button, or tapping / dragging the wheel itself.
-Spinning is unlimited — every spin is a fresh, independent random draw, with no
-per-device or per-session restriction.
+**HTML widget**. Spin by tapping or dragging the wheel itself — there's no
+separate button. Spinning is unlimited — every spin is a fresh, independent
+random draw, with no per-device or per-session restriction.
 
 ## Configure (top of the `<script>` in `index.html`)
 
