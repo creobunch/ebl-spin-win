@@ -73,9 +73,6 @@ html,body{margin:0}
 }
 .ebl-raffle .hub img{width:64%; height:auto; opacity:.96; pointer-events:none;}
 
-/* ===== Panel ===== */
-.ebl-raffle .panel{width:100%; max-width:440px}
-
 /* ===== Hidden staff control panel ===== */
 .ebl-admin{position:fixed; inset:0; z-index:99999; display:none;
   align-items:center; justify-content:center; padding:20px;
@@ -107,18 +104,6 @@ html,body{margin:0}
   font-family:"Space Grotesk",sans-serif}
 .ebl-admin .pin button:active{background:#6E1B26}
 .ebl-admin .err{color:#e08; font-size:12.5px; text-align:center; min-height:16px; margin-top:6px}
-.ebl-raffle .spin-btn{
-  appearance:none; border:0; cursor:pointer; width:100%;
-  background:linear-gradient(180deg,#fff,#f2ead9);
-  color:#161616; font-family:"Space Grotesk",sans-serif; font-weight:700;
-  font-size:17px; letter-spacing:.2px; padding:17px 22px; border-radius:0;
-  box-shadow:0 10px 30px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.9);
-  transition:transform .15s ease, box-shadow .2s ease, opacity .2s ease;
-}
-.ebl-raffle .spin-btn:hover{transform:translateY(-2px); box-shadow:0 16px 40px rgba(0,0,0,.45)}
-.ebl-raffle .spin-btn:active{transform:translateY(0)}
-.ebl-raffle .spin-btn:disabled{cursor:not-allowed; opacity:.55; transform:none}
-.ebl-raffle .spin-btn:focus-visible{outline:3px solid var(--gold-2); outline-offset:3px}
 
 /* ===== Result (popup) ===== */
 .ebl-raffle .result-overlay{
@@ -149,7 +134,6 @@ html,body{margin:0}
 }
 @media (prefers-reduced-motion:reduce){
   .ebl-raffle svg.wheel .rotor{transition:transform 1.2s ease-out}
-  .ebl-raffle .spin-btn,.ebl-raffle .result{transition:none}
 }
 </style>
 </head>
@@ -165,11 +149,6 @@ html,body{margin:0}
         <g class="rotor" id="rotor"></g>
       </svg>
       <div class="hub"><img id="hubLogo" alt="EBL"></div>
-    </div>
-
-    <!-- PANEL -->
-    <div class="panel">
-      <button class="spin-btn" id="spinBtn" type="button">🎁&nbsp; Spin &amp; Win!</button>
     </div>
   </div>
 
@@ -309,14 +288,12 @@ html,body{margin:0}
   /* ============================================================
      Spin logic
      ============================================================ */
-  var btn = document.getElementById("spinBtn");
   var resultBox = document.getElementById("resultOverlay");
   var resTag = document.getElementById("resTag");
   var resPrize = document.getElementById("resPrize");
   var resSub = document.getElementById("resSub");
   var currentRot = 0, spinning = false;
   var wheelEl = document.querySelector(".ebl-raffle svg.wheel");
-  var ORIGINAL_BTN = btn.textContent;
 
   // Result popup: close on the Close button or a tap on the backdrop
   document.getElementById("resultClose").addEventListener("click", function(){
@@ -360,7 +337,6 @@ html,body{margin:0}
   function spin(){
     if(spinning) return;
     spinning = true;
-    btn.disabled = true;
     resultBox.classList.remove("show");
 
     var idx = pickIndex();
@@ -377,7 +353,6 @@ html,body{margin:0}
       rotor.removeEventListener("transitionend", done);
       spinning = false;
       showResult(seg);
-      btn.disabled = false; // always ready for another spin — no lock, no rules
       forceNext = DEFAULT_FORCE; // clear staff override for the next guest
     };
     rotor.addEventListener("transitionend", done);
@@ -388,15 +363,12 @@ html,body{margin:0}
   /* ---- Re-arm for the next guest ---- */
   function reset(){
     spinning = false;
-    btn.disabled = false; btn.textContent = ORIGINAL_BTN;
     resultBox.classList.remove("show");
   }
   // Staff manual reset — press "R"
   window.addEventListener("keydown", function(e){
     if((e.key === "r" || e.key === "R") && !spinning) reset();
   });
-
-  btn.addEventListener("click", spin);
 
   /* ---- Tap / drag the wheel itself to spin ---- */
   var dragging = false, startAngle = 0, baseRot = 0;
