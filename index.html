@@ -29,9 +29,8 @@ html,body{margin:0}
   padding-bottom:calc(clamp(18px,4vw,56px) + env(safe-area-inset-bottom));
 }
 .ebl-raffle .wrap{
-  width:100%; max-width:1120px;
-  display:grid; grid-template-columns:1.05fr 1fr; gap:clamp(24px,5vw,72px);
-  align-items:center;
+  width:100%; max-width:560px;
+  display:flex; flex-direction:column; align-items:center; gap:clamp(22px,4vw,34px);
 }
 
 /* ===== Wheel ===== */
@@ -55,7 +54,6 @@ html,body{margin:0}
 .ebl-raffle svg.wheel.dragging{cursor:grabbing}
 .ebl-raffle svg.wheel.no-anim .rotor{transition:none}
 .ebl-raffle .pointer{pointer-events:none}
-.ebl-raffle .hub{pointer-events:none}
 .ebl-raffle svg.wheel .rotor{
   transform-box:fill-box; transform-origin:center;
   transition:transform 6s cubic-bezier(.15,.72,.09,1);
@@ -67,17 +65,16 @@ html,body{margin:0}
 .ebl-raffle .hub{
   position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
   width:26%; height:26%; border-radius:50%;
-  background:radial-gradient(120% 120% at 30% 25%, var(--maroon-2), var(--maroon) 60%, #4d121a);
+  background:#000;
   border:3px solid rgba(235,223,204,.85);
   box-shadow:0 8px 24px rgba(0,0,0,.5), inset 0 2px 8px rgba(255,255,255,.08);
   display:flex; align-items:center; justify-content:center; z-index:4;
+  cursor:pointer; -webkit-user-select:none; user-select:none; -webkit-touch-callout:none;
 }
-.ebl-raffle .hub img{width:64%; height:auto; opacity:.96;}
+.ebl-raffle .hub img{width:64%; height:auto; opacity:.96; pointer-events:none;}
 
-/* ===== Right panel ===== */
-.ebl-raffle .panel{max-width:440px}
-.ebl-raffle .brand{width:min(128px,34%); height:auto; margin:0 0 26px; opacity:.98;
-  -webkit-user-select:none; user-select:none; -webkit-touch-callout:none; cursor:default;}
+/* ===== Panel ===== */
+.ebl-raffle .panel{width:100%; max-width:440px}
 
 /* ===== Hidden staff control panel ===== */
 .ebl-admin{position:fixed; inset:0; z-index:99999; display:none;
@@ -110,15 +107,6 @@ html,body{margin:0}
   font-family:"Space Grotesk",sans-serif}
 .ebl-admin .pin button:active{background:#6E1B26}
 .ebl-admin .err{color:#e08; font-size:12.5px; text-align:center; min-height:16px; margin-top:6px}
-.ebl-raffle h1{
-  font-family:"Space Grotesk",sans-serif; font-weight:700;
-  font-size:clamp(26px,4.4vw,40px); line-height:1.08; margin:0 0 18px;
-  color:#fff; letter-spacing:-.5px;
-}
-.ebl-raffle h1 .accent{color:var(--gold-2)}
-.ebl-raffle .rules{list-style:none; margin:0 0 30px; padding:0; color:#c8c1b4; font-size:15px; line-height:1.9}
-.ebl-raffle .rules li{position:relative; padding-left:18px}
-.ebl-raffle .rules li::before{content:"–"; position:absolute; left:0; color:var(--gold-2)}
 .ebl-raffle .spin-btn{
   appearance:none; border:0; cursor:pointer; width:100%;
   background:linear-gradient(180deg,#fff,#f2ead9);
@@ -132,26 +120,31 @@ html,body{margin:0}
 .ebl-raffle .spin-btn:disabled{cursor:not-allowed; opacity:.55; transform:none}
 .ebl-raffle .spin-btn:focus-visible{outline:3px solid var(--gold-2); outline-offset:3px}
 
-/* ===== Result ===== */
-.ebl-raffle .result{
-  display:none;
-  margin-top:22px; padding:18px 20px; border-radius:0;
-  border:1px solid rgba(203,168,118,.32);
-  background:linear-gradient(180deg, rgba(110,27,38,.22), rgba(13,13,14,.4));
-  opacity:0; transform:translateY(8px); transition:opacity .4s ease, transform .4s ease;
-  pointer-events:none;
+/* ===== Result (popup) ===== */
+.ebl-raffle .result-overlay{
+  position:fixed; inset:0; z-index:9999; display:none;
+  align-items:center; justify-content:center; padding:20px;
+  background:rgba(0,0,0,.74); -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px);
 }
-.ebl-raffle .result.show{display:block; opacity:1; transform:none}
+.ebl-raffle .result-overlay.show{display:flex}
+.ebl-raffle .result{
+  width:min(420px,100%); padding:28px 26px; text-align:center;
+  border:1px solid rgba(203,168,118,.32);
+  background:linear-gradient(180deg, rgba(110,27,38,.28), #141414 65%);
+  box-shadow:0 30px 80px rgba(0,0,0,.6);
+}
 .ebl-raffle .result .tag{font-family:"Space Grotesk",sans-serif; font-weight:700; font-size:13px;
-  letter-spacing:.16em; text-transform:uppercase; color:var(--gold-2); margin:0 0 6px}
-.ebl-raffle .result .prize{font-family:"Space Grotesk",sans-serif; font-weight:700; font-size:24px; color:#fff; margin:0 0 6px; line-height:1.15}
-.ebl-raffle .result .sub{margin:0; font-size:14px; color:#c8c1b4; line-height:1.6}
+  letter-spacing:.16em; text-transform:uppercase; color:var(--gold-2); margin:0 0 8px}
+.ebl-raffle .result .prize{font-family:"Space Grotesk",sans-serif; font-weight:700; font-size:26px; color:#fff; margin:0 0 8px; line-height:1.2}
+.ebl-raffle .result .sub{margin:0 0 22px; font-size:14px; color:#c8c1b4; line-height:1.6}
+.ebl-raffle .result .close-btn{
+  appearance:none; border:1px solid rgba(235,223,204,.3); background:transparent;
+  color:#EBDFCC; font-family:"Space Grotesk",sans-serif; font-weight:700; font-size:14px;
+  padding:12px 22px; cursor:pointer;
+}
+.ebl-raffle .result .close-btn:hover{background:rgba(235,223,204,.08)}
 
 @media (max-width:860px){
-  .ebl-raffle .wrap{grid-template-columns:1fr; gap:34px; max-width:520px}
-  .ebl-raffle .panel{max-width:none; text-align:center}
-  .ebl-raffle .brand{margin-inline:auto}
-  .ebl-raffle .rules{display:inline-block; text-align:left}
   .ebl-raffle .stage{max-width:420px}
 }
 @media (prefers-reduced-motion:reduce){
@@ -176,18 +169,17 @@ html,body{margin:0}
 
     <!-- PANEL -->
     <div class="panel">
-      <img class="brand" id="brandLogo" alt="EBL — Emirates Bespoke Leather">
-      <h1>Win Exclusive <span class="accent">EBL</span> Gifts!</h1>
-      <ul class="rules">
-        <li>You can only spin the wheel once.</li>
-        <li>Good luck!</li>
-      </ul>
       <button class="spin-btn" id="spinBtn" type="button">🎁&nbsp; Spin &amp; Win!</button>
-      <div class="result" id="result" aria-live="polite">
-        <p class="tag" id="resTag">Result</p>
-        <p class="prize" id="resPrize"></p>
-        <p class="sub" id="resSub"></p>
-      </div>
+    </div>
+  </div>
+
+  <!-- RESULT POPUP -->
+  <div class="result-overlay" id="resultOverlay">
+    <div class="result" id="result" aria-live="polite">
+      <p class="tag" id="resTag">Result</p>
+      <p class="prize" id="resPrize"></p>
+      <p class="sub" id="resSub"></p>
+      <button class="close-btn" id="resultClose" type="button">Close</button>
     </div>
   </div>
 </section>
@@ -318,13 +310,21 @@ html,body{margin:0}
      Spin logic
      ============================================================ */
   var btn = document.getElementById("spinBtn");
-  var resultBox = document.getElementById("result");
+  var resultBox = document.getElementById("resultOverlay");
   var resTag = document.getElementById("resTag");
   var resPrize = document.getElementById("resPrize");
   var resSub = document.getElementById("resSub");
   var currentRot = 0, spinning = false;
   var wheelEl = document.querySelector(".ebl-raffle svg.wheel");
   var ORIGINAL_BTN = btn.textContent;
+
+  // Result popup: close on the Close button or a tap on the backdrop
+  document.getElementById("resultClose").addEventListener("click", function(){
+    resultBox.classList.remove("show");
+  });
+  resultBox.addEventListener("click", function(e){
+    if(e.target === resultBox) resultBox.classList.remove("show");
+  });
 
   // Runtime staff state
   var DEFAULT_FORCE = FORCE_INDEX;   // reset target after each spin
@@ -568,12 +568,11 @@ html,body{margin:0}
   }
 
   // Inject logo
-  var b = LOGO_SRC;
-  document.getElementById("hubLogo").src = b;
-  document.getElementById("brandLogo").src = b;
+  var hubLogoEl = document.getElementById("hubLogo");
+  hubLogoEl.src = LOGO_SRC;
 
-  // Staff panel opens on holding the EBL brand logo
-  attachHold(document.getElementById("brandLogo"));
+  // Staff panel opens on holding the centre wheel logo
+  attachHold(document.querySelector(".ebl-raffle .hub"));
 })();
 </script>
 </body>
