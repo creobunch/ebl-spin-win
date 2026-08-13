@@ -18,11 +18,11 @@ per-device or per-session restriction.
 | `SEGMENTS` | The 6 prizes, each with a `weight` (odds) and `prize: true/false`. |
 | `FORCE_INDEX` | Default forced result (`null` = use odds). |
 | `STAFF_PIN` | 4-digit PIN for the staff panel (`""` disables it). |
-| `ADMIN_HOLD_MS` | Hold time on the logo to open the staff panel. |
+| `ADMIN_HOLD_MS` | Hold time on the centre wheel logo to open the staff panel. |
 
 ## Staff control (per customer)
 
-Hold the **EBL logo** for ~1 second → enter the **PIN** → the control panel opens:
+Hold the **centre wheel logo** for ~1 second → enter the **PIN** → the control panel opens:
 
 - **Next guest wins** — pick the exact prize the next spin lands on (or Random).
 - **Gifts available** — toggle any prize off when it's out of stock.
