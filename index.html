@@ -203,16 +203,16 @@ html,body{margin:0}
   // Keep 6 segments to match the design. Set a segment's weight to 0 to
   // effectively "empty" it (e.g. prize out of stock).
   var SEGMENTS = [
-    { label: "20% Discount",  prize: true,  weight: 10 },
-    { label: "Trolley Bag",   prize: true,  weight: 3  },
-    { label: "Try Again",     prize: false, weight: 30, icon: true },
-    { label: "Arabic Sandal", prize: true,  weight: 5  },
-    { label: "Leather Goods", prize: true,  weight: 5  },
-    { label: "Try Again",     prize: false, weight: 30, icon: true }
+    { label: "10% Discount Coupon", prize: true,  weight: 6  },
+    { label: "5% Discount Coupon",  prize: true,  weight: 8  },
+    { label: "Try Again",           prize: false, weight: 30, icon: true },
+    { label: "15% Discount Coupon", prize: true,  weight: 5  },
+    { label: "20% Discount Coupon", prize: true,  weight: 4  },
+    { label: "Try Again",           prize: false, weight: 30, icon: true }
   ];
 
   // Force a specific outcome (raffle / event mode). null = use weights.
-  // e.g. FORCE_INDEX = 0  -> always land on "20% Discount".
+  // e.g. FORCE_INDEX = 0  -> always land on "10% Discount Coupon".
   // NOTE: staff can override this live from the hidden control panel below.
   var FORCE_INDEX = null;
 
@@ -251,6 +251,13 @@ html,body{margin:0}
     return [CX + r * Math.cos(a), CY + r * Math.sin(a)];
   }
 
+  var TEXT_R = 158;                // radius the wedge labels sit at
+  var ICON_SIZE_BASE = 20, ICON_GAP_BASE = 6; // at the default 20px font-size
+  // usable single-line width at TEXT_R, with a little breathing room
+  var MAX_LABEL_W = 2 * TEXT_R * Math.sin((ARC / 2) * Math.PI / 180) * 0.86;
+  var labelScale = 1;
+  var builtLabels = [];
+
   SEGMENTS.forEach(function(s, i){
     var a0 = i * ARC, a1 = (i + 1) * ARC;
     var p0 = pt(a0, R), p1 = pt(a1, R);
@@ -275,14 +282,25 @@ html,body{margin:0}
     g.appendChild(t);
     rotor.appendChild(g); // attach before measuring so getComputedTextLength() is accurate
 
-    if (s.icon) {
-      // same font-size as every other wedge label — just measure it to place the icon
-      t.setAttribute("text-anchor", "start");
-      var textW = t.getComputedTextLength();
-      var iconSize = 20, gap = 6;
+    var rawW = t.getComputedTextLength();
+    if (s.icon) rawW += ICON_SIZE_BASE + ICON_GAP_BASE;
+    if (rawW > MAX_LABEL_W) labelScale = Math.min(labelScale, MAX_LABEL_W / rawW);
+    builtLabels.push({ s: s, g: g, t: t });
+  });
+
+  // one shared font-size for every wedge label, shrunk just enough for the
+  // longest one (icon + text) to fit on a single line.
+  var LABEL_FONT = Math.max(11, 20 * labelScale);
+  builtLabels.forEach(function(b){
+    if (LABEL_FONT !== 20) b.t.style.fontSize = LABEL_FONT.toFixed(1) + "px";
+    if (b.s.icon) {
+      var iconSize = ICON_SIZE_BASE * (LABEL_FONT / 20);
+      var gap = ICON_GAP_BASE * (LABEL_FONT / 20);
+      b.t.setAttribute("text-anchor", "start");
+      var textW = b.t.getComputedTextLength();
       var total = iconSize + gap + textW;
       var startX = -total / 2;
-      t.setAttribute("x", startX + iconSize + gap);
+      b.t.setAttribute("x", startX + iconSize + gap);
 
       var img = document.createElementNS(SVGNS, "image");
       img.setAttribute("href", REFRESH_ICON);
@@ -290,9 +308,9 @@ html,body{margin:0}
       img.setAttribute("y", -iconSize / 2);
       img.setAttribute("width", iconSize);
       img.setAttribute("height", iconSize);
-      g.insertBefore(img, t);
+      b.g.insertBefore(img, b.t);
     } else {
-      t.setAttribute("text-anchor", "middle");
+      b.t.setAttribute("text-anchor", "middle");
     }
   });
 
