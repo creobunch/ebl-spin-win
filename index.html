@@ -174,16 +174,16 @@ html,body{margin:0}
   // Keep 6 segments to match the design. Set a segment's weight to 0 to
   // effectively "empty" it (e.g. prize out of stock).
   var SEGMENTS = [
-    { label: "10% Discount Coupon", prize: true,  weight: 6  },
-    { label: "5% Discount Coupon",  prize: true,  weight: 8  },
-    { label: "Try Again",           prize: false, weight: 30, icon: true },
-    { label: "15% Discount Coupon", prize: true,  weight: 5  },
-    { label: "20% Discount Coupon", prize: true,  weight: 4  },
-    { label: "Try Again",           prize: false, weight: 30, icon: true }
+    { label: "Better Luck Next Time", prize: false, weight: 30, icon: true },
+    { label: "EBL Product",           prize: true,  weight: 4  },
+    { label: "10% Discount Coupon",   prize: true,  weight: 8  },
+    { label: "5% Discount Coupon",    prize: true,  weight: 10 },
+    { label: "15% Discount Coupon",   prize: true,  weight: 6  },
+    { label: "20% Discount Coupon",   prize: true,  weight: 4  }
   ];
 
   // Force a specific outcome (raffle / event mode). null = use weights.
-  // e.g. FORCE_INDEX = 0  -> always land on "10% Discount Coupon".
+  // e.g. FORCE_INDEX = 1  -> always land on "EBL Product".
   // NOTE: staff can override this live from the hidden control panel below.
   var FORCE_INDEX = null;
 
