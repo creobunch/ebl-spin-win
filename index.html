@@ -173,9 +173,11 @@ html,body{margin:0}
   // Wheel segments, clockwise. weight = relative odds (higher = more likely).
   // Keep 6 segments to match the design. Set a segment's weight to 0 to
   // effectively "empty" it (e.g. prize out of stock).
+  // winAs: how the prize reads in "You've Won ___!" (include the article).
+  // Defaults to "a " + label when omitted.
   var SEGMENTS = [
     { label: "Better Luck Next Time", prize: false, weight: 30, icon: true },
-    { label: "EBL Product",           prize: true,  weight: 4  },
+    { label: "EBL Product",           prize: true,  weight: 4,  winAs: "an Exclusive EBL Product" },
     { label: "10% Discount Coupon",   prize: true,  weight: 8  },
     { label: "5% Discount Coupon",    prize: true,  weight: 10 },
     { label: "15% Discount Coupon",   prize: true,  weight: 6  },
@@ -323,9 +325,9 @@ html,body{margin:0}
 
   function showResult(seg){
     if(seg.prize){
-      resTag.textContent = "🎉 Congratulations";
-      resPrize.textContent = "You won: " + seg.label + "!";
-      resSub.textContent = "Screenshot this and show it at any EBL boutique to claim your reward.";
+      resTag.textContent = "🎉 Congratulations!";
+      resPrize.textContent = "You've Won " + (seg.winAs || "a " + seg.label) + "!";
+      resSub.textContent = "";
     }else{
       resTag.textContent = "So close!";
       resPrize.textContent = "Better luck next time";
