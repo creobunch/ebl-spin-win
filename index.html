@@ -189,6 +189,10 @@ html,body{margin:0}
   // NOTE: staff can override this live from the hidden control panel below.
   var FORCE_INDEX = null;
 
+  // How long to wait after the wheel stops before the result popup appears,
+  // so the wheel's landing spot is visible for a moment first.
+  var RESULT_DELAY_MS = 1200;
+
   // ---- Hidden STAFF control (open by holding the EBL logo) ----
   var STAFF_PIN = "1234";    // 4-digit PIN. Set to "" to skip the PIN prompt.
   var ADMIN_HOLD_MS = 1000;  // hold the logo this long (ms) to open the panel.
@@ -354,7 +358,8 @@ html,body{margin:0}
     var done = function(){
       rotor.removeEventListener("transitionend", done);
       spinning = false;
-      showResult(seg);
+      // brief pause so the wheel's final position is visible before the popup covers it
+      setTimeout(function(){ showResult(seg); }, RESULT_DELAY_MS);
       forceNext = DEFAULT_FORCE; // clear staff override for the next guest
     };
     rotor.addEventListener("transitionend", done);
