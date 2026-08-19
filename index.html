@@ -175,13 +175,14 @@ html,body{margin:0}
   // effectively "empty" it (e.g. prize out of stock).
   // winAs: how the prize reads in "You've Won ___!" (include the article).
   // Defaults to "a " + label when omitted.
+  // weight = probability in % (they sum to 100).
   var SEGMENTS = [
-    { label: "Better Luck Next Time", prize: false, weight: 30, icon: true },
-    { label: "EBL Product",           prize: true,  weight: 4,  winAs: "an Exclusive EBL Product" },
-    { label: "10% Discount Coupon",   prize: true,  weight: 8  },
-    { label: "5% Discount Coupon",    prize: true,  weight: 10 },
-    { label: "15% Discount Coupon",   prize: true,  weight: 6  },
-    { label: "20% Discount Coupon",   prize: true,  weight: 4  }
+    { label: "Better Luck Next Time", prize: false, weight: 18, icon: true },
+    { label: "EBL Product",           prize: true,  weight: 45, winAs: "an Exclusive EBL Product" },
+    { label: "10% Discount Coupon",   prize: true,  weight: 10 },
+    { label: "5% Discount Coupon",    prize: true,  weight: 15 },
+    { label: "15% Discount Coupon",   prize: true,  weight: 7  },
+    { label: "20% Discount Coupon",   prize: true,  weight: 5  }
   ];
 
   // Force a specific outcome (raffle / event mode). null = use weights.
