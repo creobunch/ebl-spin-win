@@ -62,6 +62,13 @@ html,body{margin:0}
   font-family:"Montserrat",sans-serif; font-weight:600;
   font-size:20px; letter-spacing:.3px; fill:var(--sand-2);
 }
+.ebl-raffle svg.wheel .rotor path{transform-box:fill-box; transform-origin:center;}
+.ebl-raffle svg.wheel .rotor path.win-flash{animation:segShine .7s ease-out;}
+@keyframes segShine{
+  0%{filter:brightness(1) saturate(1); transform:scale(1);}
+  40%{filter:brightness(2.3) saturate(1.5); transform:scale(1.06);}
+  100%{filter:brightness(1) saturate(1); transform:scale(1);}
+}
 .ebl-raffle .hub{
   position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
   width:26%; height:26%; border-radius:50%;
@@ -235,6 +242,7 @@ html,body{margin:0}
   var MAX_LABEL_W = 2 * TEXT_R * Math.sin((ARC / 2) * Math.PI / 180) * 0.86;
   var labelScale = 1;
   var builtLabels = [];
+  var wedgePaths = [];
 
   SEGMENTS.forEach(function(s, i){
     var a0 = i * ARC, a1 = (i + 1) * ARC;
@@ -247,6 +255,7 @@ html,body{margin:0}
     path.setAttribute("stroke", "rgba(203,168,118,.18)");
     path.setAttribute("stroke-width", "1");
     rotor.appendChild(path);
+    wedgePaths[i] = path;
 
     var mid = a0 + ARC / 2;
     var g = document.createElementNS(SVGNS, "g");
@@ -299,15 +308,18 @@ html,body{margin:0}
   var resTag = document.getElementById("resTag");
   var resPrize = document.getElementById("resPrize");
   var resSub = document.getElementById("resSub");
-  var currentRot = 0, spinning = false;
+  var currentRot = 0, spinning = false, resultOpen = false;
   var wheelEl = document.querySelector(".ebl-raffle svg.wheel");
 
-  // Result popup: close on the Close button or a tap on the backdrop
-  document.getElementById("resultClose").addEventListener("click", function(){
+  function closeResultPopup(){
     resultBox.classList.remove("show");
-  });
+    resultOpen = false;
+  }
+
+  // Result popup: close on the Close button or a tap on the backdrop
+  document.getElementById("resultClose").addEventListener("click", closeResultPopup);
   resultBox.addEventListener("click", function(e){
-    if(e.target === resultBox) resultBox.classList.remove("show");
+    if(e.target === resultBox) closeResultPopup();
   });
 
   // Runtime staff state
@@ -339,12 +351,13 @@ html,body{margin:0}
       resSub.textContent = "Give it another spin — good luck!";
     }
     resultBox.classList.add("show");
+    resultOpen = true;
   }
 
   function spin(){
-    if(spinning) return;
+    if(spinning || resultOpen) return;
     spinning = true;
-    resultBox.classList.remove("show");
+    wedgePaths.forEach(function(p){ p.classList.remove("win-flash"); });
 
     var idx = pickIndex();
     var mid = idx * ARC + ARC / 2;                     // segment centre (cw from top)
@@ -359,7 +372,9 @@ html,body{margin:0}
     var done = function(){
       rotor.removeEventListener("transitionend", done);
       spinning = false;
-      // brief pause so the wheel's final position is visible before the popup covers it
+      // shine + pop the winning wedge first, then bring in the result popup
+      var winPath = wedgePaths[idx];
+      if(winPath){ void winPath.offsetWidth; winPath.classList.add("win-flash"); }
       setTimeout(function(){ showResult(seg); }, RESULT_DELAY_MS);
       forceNext = DEFAULT_FORCE; // clear staff override for the next guest
     };
@@ -371,7 +386,7 @@ html,body{margin:0}
   /* ---- Re-arm for the next guest ---- */
   function reset(){
     spinning = false;
-    resultBox.classList.remove("show");
+    closeResultPopup();
   }
   // Staff manual reset — press "R"
   window.addEventListener("keydown", function(e){
@@ -387,7 +402,7 @@ html,body{margin:0}
                       e.clientX - (r.left + r.width/2)) * 180 / Math.PI;
   }
   function onDown(e){
-    if(spinning) return;
+    if(spinning || resultOpen) return;
     dragging = true;
     startAngle = angleAt(e);
     baseRot = currentRot;
